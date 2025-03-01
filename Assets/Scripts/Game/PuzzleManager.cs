@@ -1,9 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
+using System;
+using System.Text;
 
 public class PuzzleManager : MonoBehaviour
 {
+    public TextMeshProUGUI question;
+    public TextMeshProUGUI answer;
+    public string puzzleWord;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -35,6 +42,40 @@ public class PuzzleManager : MonoBehaviour
     public void Check()
     {
         // check answer
+    }
+
+    public void Proceed()
+    {
+        if (puzzleWord is not null)
+        {
+            UpdateDict();
+        }
+
+        GameManager.Instance.stage += 1;
+        int stage = GameManager.Instance.stage;
+
+        puzzleWord = ""; //newword
+    }
+
+    public void UpdateDict()
+    {
+        Dictionary<string, List<string>> letterDict = GlobalManager.Instance.letterDict;
+        int chapter = GlobalManager.Instance.chapter;
+        string userDictVal = GlobalManager.Instance.userDict[chapter];
+
+        for (int i = 0; i < 26; i++)
+        {
+            List<string> latin = new List<string>(letterDict.Keys);
+            if (puzzleWord.Contains(latin[i]))
+            {
+                StringBuilder sb = new StringBuilder(userDictVal);
+                sb[i] = char.Parse(letterDict[latin[i]][chapter]);
+                userDictVal = sb.ToString();
+            }
+        }
+
+        GlobalManager.Instance.userDict[chapter] = userDictVal;
+        GameManager.Instance.setUserDict();
     }
 
     public void GetSign()

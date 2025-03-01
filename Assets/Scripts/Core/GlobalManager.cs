@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System;
+using Unity.VisualScripting;
+using System.Data;
 public class GlobalManager : MonoBehaviour
 {
     public static GlobalManager Instance; // Singleton instance
@@ -9,6 +11,7 @@ public class GlobalManager : MonoBehaviour
     public int chapter = 0;
     public int section = 0;
     public Dictionary<string, List<string>> letterDict = new Dictionary<string, List<string>>();
+    public List<string> userDict;
 
     private void Awake()
     {
@@ -18,6 +21,7 @@ public class GlobalManager : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject); // Keeps this object when switching scenes
             InitDictionary();
+            InitUserDict();
         }
         else
         {
@@ -46,5 +50,14 @@ public class GlobalManager : MonoBehaviour
     {
         chapter = ch;
         Debug.Log("Changed chapter to: " + chapter);
+    }
+
+    public void InitUserDict()
+    {
+        userDict = new List<string>();
+        for (int i = 0; i < 4; i++)
+        {
+            userDict.Add("--------------------------");
+        }
     }
 }
